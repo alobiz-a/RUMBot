@@ -1,4 +1,9 @@
-# Microprocessors
-Repository for Physics Year 3 microprocessors lab
+# Microprocessors Final Project
+PIC18 microprocessor
 
-A simple assembly program for PIC18 microprocessor, that counts to 100, putting the current count value out onto PORTB
+Rotary Ultrasonic Mapping Robot (RUMBot). 
+Rotates around and calculates the distance to the nearest objects around it. 
+Displays it on a screen.
+
+If you touch the screen, it rescans to detect any changes.
+
