@@ -1,11 +1,12 @@
 #include <xc.inc>
 
-extrn	LCD_Setup, LCD_Write_Message, LCD_Write_Hex, LCD_Send_Byte_I, LCD_Send_Byte_D, ClearLCD ; external LCD subroutines - A. CHANGE
+extrn	LCD_Setup, LCD_Write_Message, LCD_Send_Byte_I, LCD_Send_Byte_D, ClearLCD ; external LCD subroutines - A. CHANGE
 	
 psect	udata_acs   ; reserve data space in access ram
 distanceStore:	    ds 1    ; reserve 1 byte to store the distance measured at each step
-LCD_temp:	    ds 1    ; store nibble to transmit to display
+LCD_tmp:	    ds 1    ; store nibble to transmit to display
 counter:	    ds 1
+delay_count:	    ds 1 ; reserve 1 byte for delay counter
 ; A. fill later on with counters etc.
     
 psect	udata_bank4 ; reserve data anywhere in RAM (here at 0x400)
@@ -79,7 +80,7 @@ loop:
 	lfsr	2, myArray
 	call	LCD_Write_Message
 
-	goto	$		; goto current line in code
+	goto	LCD_line2		
 	
 ;**********************Write the distance measured to line 2*********************************
 LCD_load_line2:			; Writes byte stored in W as hex
