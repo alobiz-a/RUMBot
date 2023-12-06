@@ -1,6 +1,6 @@
 #include <xc.inc>
  
-extrn	setup_PWM, servo_Rotate
+extrn	setup_PWM, PWM_loop
     
 psect	code, abs ; absolute address
 	
@@ -12,4 +12,4 @@ setup:	org	0x100
 	bcf	CFGS	; point to Flash program memory  
 	bsf	EEPGD 	; access Flash program memory
 	call	setup_PWM	; setup LCD
-	call	servo_Rotate	;k
+	call	PWM_loop	;k

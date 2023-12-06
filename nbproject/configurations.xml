@@ -14,7 +14,8 @@
                    projectFiles="true">
       <itemPath>main.s</itemPath>
       <itemPath>config.s</itemPath>
-      <itemPath>MotorFile.s</itemPath>
+      <itemPath>Makefile</itemPath>
+      <itemPath>README.md</itemPath>
       <itemPath>PWM_take2.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
