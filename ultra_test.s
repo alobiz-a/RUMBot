@@ -20,6 +20,9 @@ bsf LATH, 3 ; Set pin 3 on PORTH low.
 movlw 0xFF
 movwf TRISH ; Set all pins as inputs
 call wait_delay
+;call pulse_delay
+;call pulse_delay
+;call pulse_delay
 goto trig_one
     
     

@@ -10,7 +10,7 @@ longdelay2: ds 1
 longdelay3: ds 1
  
 pulse_delay: ; Generate 10 us delay.
-movlw 0X33
+movlw 0X22
 movwf shortdelay1
 
 pulse_delay_loop:
