@@ -1,6 +1,6 @@
 #include <xc.inc>
     
-psect code, abs
+psect delay_code, class = CODE
  
 global pulse_delay, wait_delay
 
