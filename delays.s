@@ -1,9 +1,14 @@
 #include <xc.inc>
     
-psect code
+psect code, abs
  
 global pulse_delay, wait_delay
 
+shortdelay1: ds 1
+longdelay1: ds 1
+longdelay2: ds 1
+longdelay3: ds 1
+ 
 pulse_delay: ; Generate 10 us delay.
 movlw 0X33
 movwf shortdelay1

@@ -1,12 +1,15 @@
 #include <xc.inc>
-    
-psect usrf ; Defining a psect
-
 extrn pulse_delay, wait_delay
+    
+psect code, abs ; Defining a psect
+
+ultra1_time1: ds 1
+ultra1_time2: ds 2
     
 trig_one: 
 ; Create a 10 us pulse at the RB3 pin which is connected to the 
-; first ultrasonic sensor 	
+; first ultrasonic sensor 
+org 0x00
 movlw 0x00
 movwf TRISH ; Set all pins as outputs.
 bsf LATH, 3 ; Set pin 3 on PORTH high.
@@ -18,9 +21,9 @@ goto measure_pulse
 
 interrupt_handler:
 org 0x08
-bcf T1CON, TMR1ON
+bcf T1CON, 7 ; REPLACE WITH BIT NUMBER (DATASHEET)N - PROBABLY 7
 movff CCPR1H, ultra1_time1
-movff CCPR1L, ultra2_time2
+movff CCPR1L, ultra1_time2
 clrf CCP1CON
 retfie 
 
@@ -29,7 +32,7 @@ measure_pulse:
 ;                     ________
 ; Pulse over time ___|        |_____
 ;                    <-------->
-btfsc CCP1CON, CCP1IF ; Check if CCP1 interrupt flag is set
+btfsc CCP1CON, 1 ; Check if CCP1 interrupt flag is set
 return ; Exit if the interrupt flag is not set
 movlw 0xB3 ; Bits 7:6 set the IO port as the coordinator. The timer is 
 	   ; prescaled by 8 to prevent overflows. 
