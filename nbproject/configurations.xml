@@ -16,7 +16,11 @@
       <itemPath>Makefile</itemPath>
       <itemPath>README.md</itemPath>
       <itemPath>ultra_test.s</itemPath>
+<<<<<<< HEAD
       <itemPath>delays.s</itemPath>
+=======
+      <itemPath>LCD_output.s</itemPath>
+>>>>>>> 137040a85d511018dca26b9d49695eb7f7ed8979
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
