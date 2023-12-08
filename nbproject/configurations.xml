@@ -17,6 +17,7 @@
       <itemPath>ultra_test.s</itemPath>
       <itemPath>LCD_functions.s</itemPath>
       <itemPath>main_wLCD.s</itemPath>
+      <itemPath>coordinator_main.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

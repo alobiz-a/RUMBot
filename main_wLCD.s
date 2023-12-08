@@ -113,5 +113,3 @@ delay:	decfsz	delay_count, A	; decrement until zero
 	return
 
 	end	rst
-
-

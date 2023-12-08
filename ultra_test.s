@@ -2,60 +2,83 @@
 extrn pulse_delay, wait_delay
     
 ;psect code, abs 
+global rangers_main, ranger1_time1, ranger1_time2, ranger2_time1, ranger2_time2
+
+ranger1_time1 equ 0x200
+ranger1_time2 equ 0x201
+ranger2_time1 equ 0x202
+ranger2_time2 equ 0x203 
+ 
+
+
 psect	ranger_code,class=CODE; Defining a psect
-
-ultra1_time1 equ 0x200
-ultra1_time2 equ 0x201
-
-global trig_one, ultra1_time1, ultra1_time2, interrupt_handler, rising_edge_interrupt
-
-;****The following was commented out by Ari to avoid pointing to the same address********************
-;org 0x00
-;main:
-    ;goto trig_one
-;*****************************************************************************
-
-org 0x100    
+ 
+rangers_main:
+    ; Measure the pulse length of each rangefinder.
+    ;                     ________
+    ; Pulse over time ___|        |_____
+    ;                    <-------->
+    ;************RANGER 1;************
+    call ccp_init
+    call trig_one 
+    movff CCPR1H, ultra1_time1
+    movff CCPR1L, ultra1_time2
+    ;************RANGER 2;************
+    call ccp_init
+    call trig_two
+    movff CCPR1H, ultra2_time1
+    movff CCPR1L, ultra2_time2
+    return 
+    
+ccp_init:
+    clrf CCP4CON
+    movlw 0x05	; interrupt on rising edge
+    movwf CCP4CON
+    bcf PIR1
+    return
+    
 trig_one: 
     ; Create a 10 us pulse at the RB3 pin which is connected to the 
     ; first ultrasonic sensor 
     movlw 0x00
     movwf TRISH ; Set all pins as outputs.
     bsf LATH, 3 ; Set pin 3 on PORTH high.
-    call pulse_delay 
-    bsf LATH, 3 ; Set pin 3 on PORTH low.
+    call pulse_delay ; 10us
+    bcf LATH, 3 ; Set pin 3 on PORTH low.
     movlw 0xFF
     movwf TRISH ; Set all pins as inputs
-    goto measure_pulse
+    call wait_delay ; 60ms (max time we give to start trigger)
+    return
+
+trig_two: 
+    ; Create a 10 us pulse at the RB4 pin which is connected to the 
+    ; first ultrasonic sensor 
+    movlw 0x00
+    movwf TRISH ; Set all pins as outputs.
+    bsf LATH, 4 ; Set pin 3 on PORTH high.
+    call pulse_delay 
+    bcf LATH, 4 ; Set pin 3 on PORTH low.
+    movlw 0xFF
+    movwf TRISH ; Set all pins as inputs
     call wait_delay
-    goto trig_one
+    return    
         
-org 0x08 
-interrupt_handler:
+ranger_interrupt:
     btfss PIR4, 1 ; CCP4IF, check if the interrupt was previously triggered to 
 		  ; determine if the CCP set up should change to trigger on the
 		  ; falling edge
-    goto rising_edge_interrupt
+    goto rising_edge
     bcf T1CON, 0 ; TMR1ON, turn Timer 1 off
-    movff CCPR1H, ultra1_time1
-    movff CCPR1L, ultra1_time2
     retfie f
-    
-measure_pulse:
-; Measure the length of the return pulse using Timer1.
-;                     ________
-; Pulse over time ___|        |_____
-;                    <-------->
-    goto $
-    
-rising_edge_interrupt:
+       
+rising_edge:
     clrf CCP4CON
     movlw 0x04 ; Set the CCP4 control byte to capture mode and to trigger on
 	       ; the falling edge now.
+    movwf CCP4CON
     bcf T1CON, 0 ; TMR1ON, turn Timer 1 off.
     movlw 0x77 ; 0b00110111, initialize the clock running at F_osc/4 with a 
 	       ; pre-scale of 8.
     movwf T1CON ; Turn Timer 1 on.
-    goto $
+    call wait_delay
     return
-
