@@ -14,7 +14,8 @@ DCounter5:  ds	1
 
 psect	pwm_delay_code,class=CODE
 ;*******************GENERAL******CODE***********************
-DutyCycle_LOOP:   
+DutyCycle_LOOP:
+    bsf	    LATC, 5
     DECFSZ DCounter1, 1
     GOTO DutyCycle_LOOP
     DECFSZ DCounter2, 1
@@ -116,7 +117,7 @@ Period_delay_90R:
     
     
 ;********************INITIAL CODE JUST 45 deg********************************
-;DutyCycle_delay_45:
+;DutyCycle_delay:
 ;    MOVLW 0X5a
 ;    MOVWF DCounter1
 ;    MOVLW 0X25

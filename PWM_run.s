@@ -21,7 +21,6 @@ psect	pwm_code, class = CODE
 setup_PWM:; cofigure pin RC1
     clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
     clrf TRISC
-    bsf LATC, 5
     
 ;**********************ORIGINAL BASIC PWM LOOP********************************* 
 ;PWM_loop:       
@@ -42,7 +41,6 @@ Initialise_WaitCounters: ; general: wait the same amount of time between each tu
 L_45_deg:
     call Initialise_WaitCounters
 PWM_LOOP_45L:
-    bsf	    LATC, 5	; clears pin RC5
     call DutyCycle_45L_DELAY    ;  1.75 ms  - clears the pin in there   (maybe change it tohere for niceness)                                    
     call Period_delay_45L	;   18.25 ms
     DECFSZ WaitCounter1, 1
@@ -54,7 +52,6 @@ PWM_LOOP_45L:
 R_90_deg:
     call Initialise_WaitCounters
 PWM_LOOP_90R:
-    bsf	    LATC, 5	; clears pin RC5
     call DutyCycle_90R_DELAY    ;  1.75 ms  - clears the pin in there   (maybe change it tohere for niceness)                                    
     call Period_delay_90R	;   18.25 ms
     DECFSZ WaitCounter1, 1
@@ -67,7 +64,6 @@ PWM_LOOP_90R:
 L_90_deg:
     call Initialise_WaitCounters
 PWM_LOOP_90L:
-    bsf	    LATC, 5	; clears pin RC5
     call DutyCycle_90L_DELAY    ;  1.75 ms  - clears the pin in there   (maybe change it tohere for niceness)                                    
     call Period_delay_90L	;   18.25 ms
     DECFSZ WaitCounter1, 1
@@ -81,7 +77,6 @@ PWM_LOOP_90L:
 Neutral_0_deg:
     call Initialise_WaitCounters
 PWM_LOOP_0:
-    bsf	    LATC, 5	; clears pin RC5
     call DutyCycle_0_DELAY    ;  1.75 ms  - clears the pin in there   (maybe change it tohere for niceness)                                    
     call Period_delay_0	;   18.25 ms
     DECFSZ WaitCounter1, 1
@@ -93,7 +88,6 @@ PWM_LOOP_0:
 R_45_deg:
     call Initialise_WaitCounters
 PWM_LOOP_45R:
-    bsf	    LATC, 5	; clears pin RC5
     call DutyCycle_45R_DELAY    ;  1.75 ms  - clears the pin in there   (maybe change it tohere for niceness)                                    
     call Period_delay_45R	;   18.25 ms
     DECFSZ WaitCounter1, 1

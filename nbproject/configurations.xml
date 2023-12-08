@@ -15,9 +15,8 @@
       <itemPath>config.s</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>README.md</itemPath>
-      <itemPath>PWM_delays.s</itemPath>
-      <itemPath>PWM_run.s</itemPath>
-      <itemPath>OriginalMotorCode.s</itemPath>
+      <itemPath>.gitignore</itemPath>
+      <itemPath>PWM_90L.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -36,7 +35,7 @@
         <targetDevice>PIC18F87K22</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>pic-as</languageToolchain>
         <languageToolchainVersion>2.45</languageToolchainVersion>
         <platform>3</platform>
