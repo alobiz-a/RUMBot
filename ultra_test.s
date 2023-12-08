@@ -1,31 +1,34 @@
 #include <xc.inc>
 extrn pulse_delay, wait_delay
     
-psect code, abs ; Defining a psect
+;psect code, abs 
+psect	ranger_code,class=CODE; Defining a psect
 
 ultra1_time1 equ 0x200
 ultra1_time2 equ 0x201
 
-global ultra1_time1, ultra1_time2
+global trig_one, ultra1_time1, ultra1_time2, interrupt_handler, rising_edge_interrupt
 
-org 0x00
-main:
-    goto trig_one
+;****The following was commented out by Ari to avoid pointing to the same address********************
+;org 0x00
+;main:
+    ;goto trig_one
+;*****************************************************************************
 
 org 0x100    
 trig_one: 
-; Create a 10 us pulse at the RB3 pin which is connected to the 
-; first ultrasonic sensor 
-movlw 0x00
-movwf TRISH ; Set all pins as outputs.
-bsf LATH, 3 ; Set pin 3 on PORTH high.
-call pulse_delay 
-bsf LATH, 3 ; Set pin 3 on PORTH low.
-movlw 0xFF
-movwf TRISH ; Set all pins as inputs
-goto measure_pulse
-call wait_delay
-goto trig_one
+    ; Create a 10 us pulse at the RB3 pin which is connected to the 
+    ; first ultrasonic sensor 
+    movlw 0x00
+    movwf TRISH ; Set all pins as outputs.
+    bsf LATH, 3 ; Set pin 3 on PORTH high.
+    call pulse_delay 
+    bsf LATH, 3 ; Set pin 3 on PORTH low.
+    movlw 0xFF
+    movwf TRISH ; Set all pins as inputs
+    goto measure_pulse
+    call wait_delay
+    goto trig_one
         
 org 0x08 
 interrupt_handler:
@@ -43,7 +46,7 @@ measure_pulse:
 ;                     ________
 ; Pulse over time ___|        |_____
 ;                    <-------->
-goto $
+    goto $
     
 rising_edge_interrupt:
     clrf CCP4CON
