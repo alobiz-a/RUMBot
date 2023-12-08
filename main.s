@@ -50,6 +50,7 @@ LCD_line2:
 
 	movlw   0x5			; The value in the working reg is set to 0 - A. NOW 5
 	call    LCD_Send_Byte_D	; Display this on the second line (a blank space)
+	movlw	0x6D ;CHANGE WITH VALUE OBTAINED FROM MEASUREMENT!!!
 	call	LCD_load_line2
 
 	;movf    ANSH, W, A	    ; Move what's in the ANSL register to W 
@@ -85,22 +86,23 @@ loop:
 ;**********************Write the distance measured to line 2*********************************
 LCD_load_line2:			; Writes byte stored in W as hex
 	movwf	distanceStore, A
-	swapf	distanceStore, W, A	; high nibble first (it has become the low nibble)
-	call	LCD_lowNib_write
-	movwf	distanceStore, A	; puts the original-but-swapped byte back to the w register 
-	call	LCD_lowNib_write	; writes low nibble this time
-	
-LCD_lowNib_write:			; writes low nibble as hex ASCII character
-	andlw	0x0F		; isolate the low nibble
-	movwf	LCD_tmp, A	; put the result into this temporary reg
-	movlw	0x0A		; 
+	swapf	distanceStore, W, A	; high nibble first
+	call	LCD_Hex_Nib
+	movf	distanceStore, W, A	; then low nibble
+LCD_Hex_Nib:			; writes low nibble as hex character
+	andlw	0x0F
+	movwf	LCD_tmp, A
+	movlw	0x0A
 	cpfslt	LCD_tmp, A
 	addlw	0x07		; number is greater than 9 
 	addlw	0x26
 	addwf	LCD_tmp, W, A
-	call	LCD_Send_Byte_D ; write out ascii on the LCD
-	return	
-    
+	call	LCD_Send_Byte_D ; write out ascii
+	return		
+
+	
+
+
     
 ;************ a delay subroutine if you need one, times around loop in delay_count***********
 delay:	decfsz	delay_count, A	; decrement until zero
