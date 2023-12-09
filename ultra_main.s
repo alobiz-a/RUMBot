@@ -9,8 +9,6 @@ ranger1_time2 equ 0x201
 ranger2_time1 equ 0x202
 ranger2_time2 equ 0x203 
  
-
-
 psect	ranger_code,class=CODE; Defining a psect
  
 rangers_main:
@@ -21,22 +19,22 @@ rangers_main:
     ;************RANGER 1;************
     call ccp_init
     call trig_one 
-    movff CCPR1H, ultra1_time1
-    movff CCPR1L, ultra1_time2
+    movff CCPR1H, ranger1_time1
+    movff CCPR1L, ranger1_time2
     ;************RANGER 2;************
     call ccp_init
     call trig_two
-    movff CCPR1H, ultra2_time1
-    movff CCPR1L, ultra2_time2
+    movff CCPR1H, ranger2_time1
+    movff CCPR1L, ranger2_time2
     return 
     
 ccp_init:
     clrf CCP4CON
     movlw 0x05	; interrupt on rising edge
     movwf CCP4CON
-    bcf PIR1
+    bcf PIR4, 1 ; CCP4IF 
     return
-    
+;    
 trig_one: 
     ; Create a 10 us pulse at the RB3 pin which is connected to the 
     ; first ultrasonic sensor 
