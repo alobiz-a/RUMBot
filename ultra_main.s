@@ -39,12 +39,12 @@ trig_one:
     ; Create a 10 us pulse at the RB3 pin which is connected to the 
     ; first ultrasonic sensor 
     movlw 0x00
-    movwf TRISH ; Set all pins as outputs.
-    bsf LATH, 3 ; Set pin 3 on PORTH high.
+    movwf TRISG ; Set all pins as outputs.
+    bsf LATG, 3 ; Set pin 3 on PORTH high.
     call pulse_delay ; 10us
-    bcf LATH, 3 ; Set pin 3 on PORTH low.
+    bcf LATG, 3 ; Set pin 3 on PORTH low.
     movlw 0xFF
-    movwf TRISH ; Set all pins as inputs
+    movwf TRISG ; Set all pins as inputs
     call wait_delay ; 60ms (max time we give to start trigger)
     return
 
@@ -52,12 +52,12 @@ trig_two:
     ; Create a 10 us pulse at the RB4 pin which is connected to the 
     ; first ultrasonic sensor 
     movlw 0x00
-    movwf TRISH ; Set all pins as outputs.
-    bsf LATH, 4 ; Set pin 3 on PORTH high.
+    movwf TRISG ; Set all pins as outputs.
+    bsf LATG, 4 ; Set pin 3 on PORTH high.
     call pulse_delay 
-    bcf LATH, 4 ; Set pin 3 on PORTH low.
+    bcf LATG, 4 ; Set pin 3 on PORTH low.
     movlw 0xFF
-    movwf TRISH ; Set all pins as inputs
+    movwf TRISG ; Set all pins as inputs
     call wait_delay
     return    
         
