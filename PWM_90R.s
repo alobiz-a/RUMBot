@@ -1,4 +1,6 @@
 #include <xc.inc>
+
+global PWM_90R
     
 psect	udata_acs   ; named variables in access ram
 DCounter1:  ds	1
@@ -9,14 +11,15 @@ DCounter5:  ds	1
 
 psect	pwm_delay_code,class=CODE
 
-setup_PWM:; cofigure pin RC1
-    clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
-    clrf TRISC
+;setup_PWM:; cofigure pin RC1
+;    clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
+;    clrf TRISC
 
-PWM_loop_90R:       
+PWM_90R:       
     call DutyCycle    ;  1.75 ms                                         
     call Period	;   18.25 ms
-    goto PWM_loop_90R 
+    ;goto PWM_loop_90R - 11.12.23 I COMMENTED THIS OUT
+    return
 
     
 DutyCycle:
