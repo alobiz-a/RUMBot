@@ -20,6 +20,8 @@
       <itemPath>LCD_routines.s</itemPath>
       <itemPath>main_MLR.s</itemPath>
       <itemPath>PWM_90R.s</itemPath>
+      <itemPath>delays.s</itemPath>
+      <itemPath>tentative_main_MLR_full180.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

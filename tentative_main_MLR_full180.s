@@ -2,7 +2,7 @@
 #include <xc.inc>
     
 extrn	main_LCD_loop, LCD_Setup
-extrn PWM_90R
+extrn PWM_90R, PWM_45R, PWM_0, PWM_45L, PWM_90L
 extrn Delay_3s
     
 psect	udata_acs   ; named variables in access ram
@@ -31,20 +31,71 @@ setup:
 start:
     ;call main_LCD_loop
     call Set_Mdelay_counter ;initialise the counters
-    call M_loop_90R 
+    call M_loop_90L 
     call main_LCD_loop
     call Delay_3s   ; cos why not
     ;******
     call Set_Mdelay_counter ;initialise the counters
-    call M_loop_90R
+    call M_loop_45L
+    call main_LCD_loop
+    call Delay_3s
     ;******
+    call Set_Mdelay_counter ;initialise the counters
+    call M_loop_0
+    call main_LCD_loop
+    call Delay_3s
+    ;******
+    call Set_Mdelay_counter ;initialise the counters
+    call M_loop_45R
+    call main_LCD_loop
+    call Delay_3s
+    ;******
+    call Set_Mdelay_counter ;initialise the counters
+    call M_loop_90R
+    call main_LCD_loop
+    call Delay_3s
+    ;******  
+    
     goto start ;so that it doesn't clear the LCD each time
-    
-    
 
-    
+M_loop_90L:
+    call PWM_90L
+    decfsz MD1, 1
+    goto M_loop_90L
+    decfsz MD2, 1
+    goto M_loop_90L
+    decfsz MD3, 1
+    goto M_loop_90L
+    return      
+M_loop_45L:
+    call PWM_45L
+    decfsz MD1, 1
+    goto M_loop_45L
+    decfsz MD2, 1
+    goto M_loop_45L
+    decfsz MD3, 1
+    goto M_loop_45L
+    return      
+M_loop_0:
+    call PWM_0
+    decfsz MD1, 1
+    goto M_loop_0
+    decfsz MD2, 1
+    goto M_loop_0
+    decfsz MD3, 1
+    goto M_loop_0
+    return  
+M_loop_45R:
+    call PWM_45R
+    decfsz MD1, 1
+    goto M_loop_45R
+    decfsz MD2, 1
+    goto M_loop_45R
+    decfsz MD3, 1
+    goto M_loop_45R
+    return     
 M_loop_90R:
-    ;call PWM_90R
+    call PWM_90R
     decfsz MD1, 1
     goto M_loop_90R
     decfsz MD2, 1
@@ -52,7 +103,7 @@ M_loop_90R:
     decfsz MD3, 1
     goto M_loop_90R
     return
-    
+
     
 
     
@@ -75,4 +126,5 @@ Set_Mdelay_counter:
 ;    return
     
 end	rst
-    
+
+

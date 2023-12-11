@@ -11,9 +11,6 @@ DCounter5:  ds	1
 
 psect	pwm_delay_code,class=CODE
 
-;setup_PWM:; cofigure pin RC1
-;    clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
-;    clrf TRISC
 
 PWM_90R:       
     call DutyCycle    ;  1.75 ms                                         
