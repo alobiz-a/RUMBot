@@ -2,23 +2,25 @@
 
 global Delay_3s
     
-DCounter1 EQU 0X0C
-DCounter2 EQU 0X0D
-DCounter3 EQU 0X0E
+psect	udata_acs   ; named variables in access ram
+D1:  ds	1
+D2:  ds	1
+D3:  ds	1
 
 
+psect	delay_code,class=CODE
 Delay_3s:
     movlw 0X03
-    movwf DCounter1
+    movwf D1
     movlw 0X82
-    movwf DCounter2
+    movwf D2
     movlw 0XF4
-    movwf DCounter3
+    movwf D3
 loop:
-    decfsz DCounter1, 1
+    decfsz D1, 1
     goto loop
-    decfsz DCounter2, 1
+    decfsz D2, 1
     goto loop
-    decfsz DCounter3, 1
+    decfsz D3, 1
     goto loop
     return
