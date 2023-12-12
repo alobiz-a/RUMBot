@@ -7,8 +7,13 @@ DCounter3:  ds	1
 DCounter4:  ds	1   ; used to be DCounter2 EQU 0X0D
 DCounter5:  ds	1
 
-psect	pwm_delay_code,class=CODE
+psect	pwm_delay_code,class=CODE,abs
+;***************change this bit if running from elsewhere******************
+org 0x0
+     goto 0x100
 
+org 0x100
+;**************************************************************************
 setup_PWM:; cofigure pin RC1
     clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
     clrf TRISC
