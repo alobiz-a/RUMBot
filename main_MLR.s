@@ -33,9 +33,10 @@ setup:
 start:
     call main_LCD_loop
     call Set_Mdelay_counter ;initialise the counters
-    call Check_running
-    call M_loop_90R
-    ;call PWM_90R
+    call Check_running_on
+    call PWM_90R
+    ;call M_loop_90R
+    call Check_running_on
     call main_LCD_loop
     call Delay_3s   ; cos why not
     ;******
@@ -69,11 +70,15 @@ Set_Mdelay_counter:
     movwf MD3
     return
 
-Check_running:
+Check_running_on:
     movlw   0x00
     movwf   TRISE
     movlw   0xFF
     movwf   LATE
+Check_running_off:
+    clrf    LATE
+    ;clrf    PORTE      ; clear portc (set pins to a low voltage/0 state) to configure motor
+
     
 ;M_loop:
 ;    decfsz MD1, 1
