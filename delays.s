@@ -2,41 +2,56 @@
     
 psect delay_code, class = CODE
  
-global pulse_delay, wait_delay
+global pulse_delay, ranging_delay, wait_delay
 
-sd1: ds 1
-ld1: ds 1
-ld2: ds 1
-l3: ds 1
+pd1:	ds 1
+rd1:	ds 1
+rd2:	ds 1
+wd1:	ds 1
+wd2:	ds 1
+wd3:	ds 1
 
-org 0x00
+;org 0x00
 pulse_delay: ; Generate 10 us delay.
     movlw   0X22
-    movwf   sd1
+    movwf   pd1
 
 pulse_delay_loop:
     nop
     nop
-    decfsz  sd1, 1
+    decfsz  pd1, 1
     goto    pulse_delay_loop
     return
+    
+ranging_delay: ; Generate a 500 us delay.
+    movlw   0x61
+    movwf   rd1
+    movlw   0x0b
+    movwf   rd2
+
+ranging_delay_loop:
+    decfsz  rd1, 1
+    goto    ranging_delay_loop
+    decfsz  rd2, 1
+    goto    ranging_delay_loop
+    return    
 
 wait_delay: ; Generate a 60 ms delay. Made using an online delay generator.
     movlw   0xBA
-    movwf   ld1
+    movwf   wd1
     movlw   0xDF
-    movwf   ld2
+    movwf   wd2
     movlw   0x05
-    movwf   ld3
+    movwf   wd3
 
 wait_delay_loop:
-    decfsz  ld1, 1
+    decfsz  wd1, 1
     goto    wait_delay_loop
-    decfsz  ld2, 1
+    decfsz  wd2, 1
     goto    wait_delay_loop
-    decfsz  ld3, 1
+    decfsz  wd3, 1
     goto    wait_delay_loop
     nop
     return
 
-
+ end
