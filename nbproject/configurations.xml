@@ -16,12 +16,12 @@
       <itemPath>Makefile</itemPath>
       <itemPath>README.md</itemPath>
       <itemPath>.gitignore</itemPath>
-      <itemPath>LCD_ranger.s</itemPath>
-      <itemPath>LCD_routines.s</itemPath>
       <itemPath>main_MLR.s</itemPath>
       <itemPath>PWM_90R.s</itemPath>
       <itemPath>delays.s</itemPath>
-      <itemPath>tentative_main_MLR_full180.s</itemPath>
+      <itemPath>LCD_routines.s</itemPath>
+      <itemPath>UART_routines.s</itemPath>
+      <itemPath>LCD_ranger.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -40,7 +40,7 @@
         <targetDevice>PIC18F87K22</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>pic-as</languageToolchain>
         <languageToolchainVersion>2.45</languageToolchainVersion>
         <platform>3</platform>

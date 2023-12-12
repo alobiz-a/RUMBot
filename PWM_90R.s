@@ -15,8 +15,8 @@ psect	pwm_delay_code,class=CODE
 PWM_90R:       
     call DutyCycle    ;  1.75 ms                                         
     call Period	;   18.25 ms
-    ;goto PWM_loop_90R - 11.12.23 I COMMENTED THIS OUT
-    return
+    goto PWM_90R ;- 11.12.23 I COMMENTED THIS OUT
+    ;return
 
     
 DutyCycle:

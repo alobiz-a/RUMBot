@@ -2,8 +2,9 @@
 #include <xc.inc>
     
 extrn	main_LCD_loop, LCD_Setup
-extrn PWM_90R
-extrn Delay_3s
+extrn	PWM_90R
+extrn	Delay_3s
+extrn	UART_Setup, UART_Transmit_Message  ; external uart subroutines
     
 psect	udata_acs   ; named variables in access ram
 MD1:  ds	1   ; the motor delay counters
@@ -25,13 +26,16 @@ setup:
     clrf	PORTC      ; clear portc (set pins to a low voltage/0 state) to configure motor
     clrf	TRISC
     call	LCD_Setup	; setup LCD
+    call	UART_Setup
     goto	start
 
 
 start:
-    ;call main_LCD_loop
+    call main_LCD_loop
     call Set_Mdelay_counter ;initialise the counters
-    call M_loop_90R 
+    call Check_running
+    call M_loop_90R
+    ;call PWM_90R
     call main_LCD_loop
     call Delay_3s   ; cos why not
     ;******
@@ -44,7 +48,7 @@ start:
 
     
 M_loop_90R:
-    ;call PWM_90R
+    call PWM_90R
     decfsz MD1, 1
     goto M_loop_90R
     decfsz MD2, 1
@@ -64,6 +68,12 @@ Set_Mdelay_counter:
     movlw 0Xa3
     movwf MD3
     return
+
+Check_running:
+    movlw   0x00
+    movwf   TRISE
+    movlw   0xFF
+    movwf   LATE
     
 ;M_loop:
 ;    decfsz MD1, 1
