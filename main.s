@@ -1,24 +1,37 @@
-	#include <xc.inc>
-
-psect	code, abs
+; main file to control the motor, the LCD and the ranger
+#include <xc.inc>
+    
+extrn	main_LCD_loop, LCD_Setup
+;extrn	PWM_90R, PWM_45R, PWM_0, PWM_45L, PWM_90L
+;extrn	Delay_3s
+;extrn	UART_Setup, UART_Transmit_Message  ; external uart subroutines
+    
+psect	udata_acs   ; named variables in access ram
+MD1:  ds	1   ; the motor delay counters
+MD2:  ds	1
+MD3:  ds	1
+    
+psect	code, abs ; absolute address
 	
-main:
-	org	0x0
-	goto	start
+rst:	; reset vector	
+	org 0x0
+ 	goto	setup
 
-	org	0x100		    ; Main code starts here at address 0x100
+
+
+	; ******* Programme FLASH read Setup Code ***********************
+org	0x100
+setup:	
+    
+    bcf	CFGS	; point to Flash program memory  
+    bsf	EEPGD 	; access Flash program memory
+;    clrf	PORTC      ; clear portc (set pins to a low voltage/0 state) to configure motor
+;    clrf	TRISC
+    call	LCD_Setup	; setup LCD
+    ;call	UART_Setup
+    goto	start
+
+
 start:
-	movlw 	0x0
-	movwf	TRISB, A	    ; Port C all outputs
-	bra 	test
-loop:
-	movff 	0x06, PORTB
-	incf 	0x06, W, A
-test:
-	movwf	0x06, A	    ; Test for end of loop condition
-	movlw 	0x63
-	cpfsgt 	0x06, A
-	bra 	loop		    ; Not yet finished goto start of loop again
-	goto 	0x0		    ; Re-run program from start
-
-	end	main
+    call main_LCD_loop
+    goto start
