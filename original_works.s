@@ -1,4 +1,3 @@
-
 #include <xc.inc>
     
 extrn pulse_delay, wait_delay
@@ -23,7 +22,7 @@ interrupt:
     org	    0x08
     ;bcf    CCP4IF
     btfss   CCP4IF   
-    retfie  f ;is this necessary?
+    retfie  f;is this necessary?
     bcf	    CCP4IF
     btfss   ocurred, 0, A		; Has an interrupt already happened?
     goto    interrupt_rise	; No, go to rising edge interrupt
@@ -39,7 +38,6 @@ ranger_main:
     call    wait_delay
     call    wait_delay
     call    wait_delay
-    ;call    display_results
     goto    ranger_main	;stay here until an interrupt causes us to jump out
     
 interrupt_clear:
@@ -70,12 +68,12 @@ trigger_test:
     bcf     LATG, 3	; Set pin 3 to be low.
     
 trigger_ranger:
-    ;********Disable interrupts************
+    ;******Disable interrupts**********
     bcf	    CCP4IE	; Disable interrupts
-    ;********Setting the pins to outputs*******
+    ;******Setting the pins to outputs*****
     movlw   0x00
     movwf   TRISG	; Make all pins on PORTG outputs
-    ;********Send pulse*************
+    ;******Send pulse***********
     bsf     LATG, 3     ; Set pin 3 to be high
     call    pulse_delay ; 10 us delay
     bcf     LATG, 3	; Set pin 3 to be low.
@@ -83,25 +81,25 @@ trigger_ranger:
     nop
     nop
     nop
-    ;********Set pins as inputs*********
+    ;******Set pins as inputs*******
     movlw   0xFF	
     movwf   TRISG	; Make all pins on PORTG inputs
-    ;********Set up to capture on rising edge******
+    ;******Set up to capture on rising edge****
     clrf    CCP4CON	
     movlw   0x05		
     movwf   CCP4CON	; Set the CCP4 control byte to capture mode and to 
     			; trigger on the rising edge (CCP4M = 0101)
-    ;********Set PORTG to digital**************( A. PUT IN SETUP!!)*******
+    ;******Set PORTG to digital**********( A. PUT IN SETUP!!)*****
     banksel ANCON2	;points to it
     clrf    ANCON2	; 0 = digital
     banksel 0		; default
-    ;***********SET PORTE AS OUTPUT FOR DEBUGGING PURPOSES************
+    ;*********SET PORTE AS OUTPUT FOR DEBUGGING PURPOSES**********
     clrf    TRISE	
     movff   PORTG, LATE	; Display what's happening on G to E to prove we can read
 ;    goto    tstlp   ;INFINITE?????
 ;    call    wait_delay
-    ;*************************(ABOVE GOES IN SETUP)***********************
-    ;*************Re-enable interrupts***********************
+    ;***********************(ABOVE GOES IN SETUP)*********************
+    ;***********Re-enable interrupts*********************
     bsf	    CCP4IE	; Enable interrupts
     return
 
@@ -113,11 +111,11 @@ interrupt_rise:
     bcf	    CCP4IF	;added
     call    flash_rise   ;for debugging
     bsf   ocurred, 0 ; An interrupt has occured	
-    ;**********TRIGGER ON FALLING EDGE************************
+    ;********TRIGGER ON FALLING EDGE**********************
     clrf    CCP4CON
     movlw   0x04    
     movwf   CCP4CON 
-    ;*********START TIMERS**********
+    ;*******START TIMERS********
     movlw   0x00
     movwf   CCPTMRS1	; CCP4 is based off of TMR1
     clrf    TMR1H   ;clear timers just in case
@@ -132,13 +130,13 @@ interrupt_fall:
     ;***********Clear interrupt flag and 
     bcf	    CCP4IE	;clear interrupt flag for these instructions
     call    flash_fall   ;for debugging
-    ;***********Turn off timer************
+    ;*********Turn off timer**********
     bsf	    T1CON, 0		; Turn off TMR1
     movff   CCPR4H, time_one_H	; Move timer high byte into high byte storage
     movff   CCPR4L, time_one_L	; Move timer low byte into low byte storage
     bcf	    CCP4IF  ; need to add! 
     bcf    ocurred,0	; Clear flag byte: an interrupt has not yet occured
-    
+    call    display_results
     retfie  f    
 
 
@@ -155,7 +153,6 @@ flash_fall:
     call    pulse_delay ; 10 us delay
     bcf     LATA, 4	; Set pin 4 to be low.
     clrf    LATA
-    
     return
     
 flash_rise:
@@ -170,24 +167,15 @@ flash_rise:
     clrf    LATA
     
     return
-
+    
 display_results:
     movlw   0x00
     movwf   TRISC
-    movlw   0x00
     movwf   TRISD
     movff   time_one_H, LATC
     movff   time_one_L, LATD
     call    wait_delay
-    call    wait_delay
-    call    wait_delay
     clrf    LATC
     clrf    LATD
-    return
     
-    end ranger_main
-
-
-
-
-
+    return
