@@ -113,6 +113,6 @@ ranger_main:
     call    wait_delay
     goto    ranger_main
     
-    
+ 
 
 

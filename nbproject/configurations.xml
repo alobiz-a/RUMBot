@@ -15,10 +15,8 @@
       <itemPath>config.s</itemPath>
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
-      <itemPath>fri_usrf.s</itemPath>
       <itemPath>Delays.s</itemPath>
-      <itemPath>Àris_ranger.s</itemPath>
-      <itemPath>Simplified_ranger.s</itemPath>
+      <itemPath>ranger_playground.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

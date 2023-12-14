@@ -6,7 +6,7 @@ global ranger_main, time_one_L, time_one_H
     
 psect udata_acs
  
-occured:    ds 1 ; Has an interrupt happened (c.a.d. we on the rising or falling edge)?
+ocurred:    ds 1 ; Has an interrupt happened (c.a.d. we on the rising or falling edge)?
 time_one_L: ds 1    ;low bit for ranger 1
 time_one_H: ds 1    ;high bit for ranger 1
 
@@ -21,13 +21,16 @@ rst:
     
 interrupt:
     org	    0x08
-    btfss   occured, 0, A		; Has an interrupt already happened?
+    ;bcf    CCP4IF
+    btfss   CCP4IF   
+    retfie  f;is this necessary?
+    bcf	    CCP4IF
+    btfss   ocurred, 0, A		; Has an interrupt already happened?
     goto    interrupt_rise	; No, go to rising edge interrupt
     goto    interrupt_fall	; Yes, go to falling edge interrupt
     ;might need to check if correct CCP module
 
-ranger_main:
-    
+ranger_main:   
     ;call    trigger_ranger
     call    interrupt_setup ;Initialise the interrupts (ensure everything is cleared)
     call    trigger_test
@@ -35,16 +38,16 @@ ranger_main:
     call    wait_delay
     call    wait_delay
     goto    ranger_main	;stay here until an interrupt causes us to jump out
-    
+
 interrupt_setup:
     ; Initialize interrupts and flags
     bsf	    INTCON, 6	; Enable all unmasked interrupts
     bsf	    INTCON, 7	; Enable peripheral interrupt
     bsf	    CCP4IE	; Enable interrupts
     ;A. QUESTION do we need to disable IPEN?
-    ;clrf    PIR4	; Clear all interrupt flags
+    bcf	    CCP4IF	; Clear interrupt flag (PIR4,0)
     bsf	    IPR4, 1	; Set CCP4 interrupt as high priority
-    clrf    occured	; Clear flag byte: an interrupt has not yet occured
+    bcf    ocurred,0	; Clear flag byte: an interrupt has not yet occured
     return
 
 trigger_test:
@@ -53,7 +56,9 @@ trigger_test:
     bcf     LATG, 3	; Set pin 3 to be low.
     
 trigger_ranger:
-    ;********Setting the pins*******
+    ;********Disable interrupts************
+    bcf	    CCP4IE	; Disable interrupts
+    ;********Setting the pins to outputs*******
     movlw   0x00
     movwf   TRISG	; Make all pins on PORTG outputs
     ;********Send pulse*************
@@ -78,6 +83,8 @@ trigger_ranger:
 ;    goto    tstlp   ;INFINITE?????
 ;    call    wait_delay
     ;*************************(ABOVE GOES IN SETUP)***********************
+    ;*************Re-enable interrupts***********************
+    bsf	    CCP4IE	; Enable interrupts
     return
 
     
@@ -87,7 +94,7 @@ interrupt_rise:
     bcf	    CCP4IE	;clear interrupt flag for these instructions
     bcf	    CCP4IF	;added
     call    flash   ;for debugging
-    bsf   occured, 0 ; An interrupt has occured	
+    bsf   ocurred, 0 ; An interrupt has occured	
     ;**********TRIGGER ON FALLING EDGE************************
     clrf    CCP4CON
     movlw   0x04    
@@ -106,13 +113,13 @@ interrupt_rise:
 interrupt_fall:
     ;***********Clear interrupt flag and 
     bcf	    CCP4IE	;clear interrupt flag for these instructions
-    call    flash   ;for debugging
+    ;call    flash   ;for debugging
     ;***********Turn off timer************
     bsf	    T1CON, 0		; Turn off TMR1
     movff   CCPR4H, time_one_H	; Move timer high byte into high byte storage
     movff   CCPR4L, time_one_L	; Move timer low byte into low byte storage
     bcf	    CCP4IF  ; need to add! 
-    bcf    occured,0	; Clear flag byte: an interrupt has not yet occured
+    bcf    ocurred,0	; Clear flag byte: an interrupt has not yet occured
     
     retfie  f    
 
@@ -135,5 +142,8 @@ flash:
     
 
     end ranger_main
+
+
+
 
 
