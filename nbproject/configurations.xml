@@ -15,10 +15,10 @@
       <itemPath>config.s</itemPath>
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
-      <itemPath>delay.s</itemPath>
-      <itemPath>main.s</itemPath>
-      <itemPath>CCP_routines.s</itemPath>
-      <itemPath>main_simple_ranger.s</itemPath>
+      <itemPath>fri_usrf.s</itemPath>
+      <itemPath>Delays.s</itemPath>
+      <itemPath>Àris_ranger.s</itemPath>
+      <itemPath>Simplified_ranger.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -1156,8 +1156,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/ari_a/OneDrive - Imperial College London/Physics Degree/Y4/RUMBot/debug/default/default_ptg"/>
         <property key="programmerToGoImageName" value="default_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
