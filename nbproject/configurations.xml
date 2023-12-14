@@ -15,8 +15,10 @@
       <itemPath>config.s</itemPath>
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
-      <itemPath>main.s</itemPath>
       <itemPath>delay.s</itemPath>
+      <itemPath>main.s</itemPath>
+      <itemPath>CCP_routines.s</itemPath>
+      <itemPath>main_simple_ranger.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -601,6 +603,8 @@
         <property key="periphComp5.gte" value="gt"/>
         <property key="periphComp6.gte" value="gt"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Users/ari_a/OneDrive - Imperial College London/Physics Degree/Y4/RUMBot/debug/default/default_ptg"/>
         <property key="programmerToGoImageName" value="default_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
