@@ -14,9 +14,8 @@
                    projectFiles="true">
       <itemPath>config.s</itemPath>
       <itemPath>delays.s</itemPath>
-      <itemPath>us_itp_test.s</itemPath>
       <itemPath>hex_to_dec.s</itemPath>
-      <itemPath>us_polling_test.s</itemPath>
+      <itemPath>fri_usrf_ints.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -35,7 +34,7 @@
         <targetDevice>PIC18F87K22</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>pk4hybrid</platformTool>
         <languageToolchain>pic-as</languageToolchain>
         <languageToolchainVersion>2.45</languageToolchainVersion>
         <platform>3</platform>
@@ -1154,8 +1153,6 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
-        <property key="programmerToGoFilePath"
-                  value="C:/Users/ojphi/OneDrive - Imperial College London/Discount_GitHub/Raisin_RUMbot/debug/default/default_ptg"/>
         <property key="programmerToGoImageName" value="default_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>

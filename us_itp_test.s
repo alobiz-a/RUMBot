@@ -9,78 +9,137 @@ psect udata_acs
 time_H:		ds 1
 time_L:		ds 1
 
-global	ranger_main, time_H, time_L
+;global	ranger_main, time_H, time_L
     
-psect ranger_code, class = CODE, abs
+psect code, abs 
     
 org 0x00
-start:
-    goto    ranger_main
-    
-interrupt_handler:
-    org 0x08
-    btfss   flag, 0
-    goto    rising_edge
-    goto    falling_edge
-    
-ranger_main:
-    call    ranger_init
-    call    trigger
-    call    wait_delay
-    goto    ranger_main
-    
-ranger_init:
-    bsf	    INTCON, 6	; Enable peripheral interrupt
-    bsf	    INTCON, 7	; Enable global interrupt
-    bsf	    PIE4, 1	; Set CCP4 interrupt
-    bsf     IPR4, 1     ; Set CCP4 interrupt as high priority
-    clrf    PIR4	; Clear interrupt flag register
-    clrf    flag	; Clear sequence flag register
-    return
-    
-trigger:
-    ; Initialize the CC64 interrupt and trigger the ultrasonic range finder.
-    movlw   0x00
-    movwf   TRISG	; Make all pins on PORTG outputs.
-    bsf     LATG, 3	; Set pin 3 to be high.
-    call    pulse_delay 
-    bcf     LATG, 3	; Set pin 3 to be low.
-    movlw   0xFF
-    movwf   TRISG	; Make all pins on PORTG inputs
-    clrf    CCP4CON    
-    movlw   0x05	; Set the CCP control byte to capture mode and to
-			; trigger on the rising edge (CCP4M = 0101)
-    movwf   CCP4CON
-    call    wait_delay
-    return
  
-rising_edge:
-    bcf	    PIE4, 1	; Temporarily disable interrupts on CCP4
-    clrf    CCP4CON
-    movlw   0x04
-    movwf   CCP4CON	; Set the CCP4 control byte to capture mode and to 
-			; trigger on the falling edge (CCP4M = 0100)
-    clrf    CCPTMRS1
-    movlw   0x00
-    movwf   CCPTMRS1	; CCP4 is based on TMR1	
-    clrf    T1CON
-    movlw   0x31
-    movwf   T1CON	; Set TMR1 to use F_osc/4 prescaled by a factor of 8
-    movwf   TRISD	; Make all pins on PORTD outputs.
-    bsf     LATD, 3	; Set pin 3 to be high.
-    call    wait_delay	; Illuminate to verify interrupt operation
-    bcf     LATD, 3	; Set pin 3 to be low.
-    bsf	    PIE4, 1	; Re-enable interrupts on CCP5
+polling:
+    movlw   0xFF
+    movwf   TRISG
+    btfss   PORTG, 3
+    goto    light_up
+    goto    polling
     
-falling_edge:
-    bcf	    PIE4, 1	    ; Temporarily disable interrupts on CCP6
-    bsf	    T1CON, 0	    ; Turn off TMR1
-    bsf	    PIE4, 1	    ; Re-enable interrupts on CCP6
-    movff   TMR1H, time_H
-    movff   TMR1L, time_L
+light_up:
     movlw   0x00
-    bsf	    PIE4, 1	; Re-enable interrupts on CCP4
-    return
+    movwf   TRISB	; Make all pins on PORTG outputs.
+    movlw   0xFF
+    movwf   LATB	; Set pin 3 to be high.
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    call    wait_delay
+    movlw   0x00
+    movwf   LATB	; Set pin 3 to be high.
+
+    goto polling
+ 
+;start:
+;    goto    ranger_main
+;    
+;;interrupt_handler:
+;;    org 0x08
+;;    btfss   flag, 0
+;;    goto    rising_edge
+;;    goto    falling_edge
+;    
+;ranger_main:
+;;    call    ranger_init
+;;    call    trigger
+;    call    wait_delay
+;    call    trigger
+;;    movwf   TRISG	; Make all pins on PORTD outputs.
+;;    bsf     LATG, 3	; Set pin 3 to be high.
+;;    call    pulse_delay	; Illuminate to verify interrupt operation
+;;    bcf     LATG, 3	; Set pin 3 to be low.
+;    goto    ranger_main
+;    
+;ranger_init:
+;    bsf	    INTCON, 6	; Enable peripheral interrupt
+;    bsf	    INTCON, 7	; Enable global interrupt
+;    bsf	    PIE4, 1	; Set CCP4 interrupt
+;    bsf     IPR4, 1     ; Set CCP4 interrupt as high priority
+;    clrf    PIR4	; Clear interrupt flag register
+;    clrf    flag	; Clear sequence flag register
+;    return
+;    
+;trigger:
+;    ; Initialize the CCP4 interrupt and trigger the ultrasonic range finder.
+;    movlw   0x00
+;    movwf   TRISG	; Make all pins on PORTG outputs.
+;    bsf     LATG, 3	; Set pin 3 to be high.
+;    call    pulse_delay 
+;    bcf     LATG, 3	; Set pin 3 to be low.
+;    movlw   0xFF
+;    movwf   TRISG	; Make all pins on PORTG inputs
+;;    clrf    CCP4CON    
+;;    movlw   0x05	; Set the CCP control byte to capture mode and to
+;;			; trigger on the rising edge (CCP4M = 0101)
+;;    movwf   CCP4CON
+;    goto polling
+;    
+;polling:
+;    btfss   PORTG, 3	    ; Check if pin 3 on PORTG is high.
+;    goto    polling
+;    goto light_up
+;    
+;
+;light_up:
+;    movlw   0x00
+;    movwf   TRISB	; Make all pins on PORTG outputs.
+;    movlw   0xFF
+;    movwf   LATB	; Set pin 3 to be high.
+;    call wait_delay
+;    movlw   0x00
+;    movwf   LATB	; Set pin 3 to be high.
+;    goto ranger_main
+    
+    
+    
+    
+ 
+;rising_edge:
+;    bcf	    PIE4, 1	; Temporarily disable interrupts on CCP4
+;    clrf    CCP4CON
+;    movlw   0x04
+;    movwf   CCP4CON	; Set the CCP4 control byte to capture mode and to 
+;			; trigger on the falling edge (CCP4M = 0100)
+;    clrf    CCPTMRS1
+;    movlw   0x00
+;    movwf   CCPTMRS1	; CCP4 is based on TMR1	
+;    clrf    T1CON
+;    movlw   0x31
+;    movwf   T1CON	; Set TMR1 to use F_osc/4 prescaled by a factor of 8
+;    movwf   TRISD	; Make all pins on PORTD outputs.
+;    bsf     LATD, 3	; Set pin 3 to be high.
+;    call    wait_delay	; Illuminate to verify interrupt operation
+;    bcf     LATD, 3	; Set pin 3 to be low.
+;    bsf	    PIE4, 1	; Re-enable interrupts on CCP5
+;    
+;falling_edge:
+;    bcf	    PIE4, 1	    ; Temporarily disable interrupts on CCP6
+;    bsf	    T1CON, 0	    ; Turn off TMR1
+;    bsf	    PIE4, 1	    ; Re-enable interrupts on CCP6
+;    movff   TMR1H, time_H
+;    movff   TMR1L, time_L
+;    movlw   0x00
+;    bsf	    PIE4, 1	; Re-enable interrupts on CCP4
+;    return
+    
+    
+    
+    
+    
+    
     
 ;    
 ;falling_one:
