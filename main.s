@@ -1,24 +1,39 @@
-	#include <xc.inc>
+#include <xc.inc>
+extrn pulse_delay, ranging_delay, wait_delay, delay_1s
 
-psect	code, abs
-	
+psect code, abs
+
 main:
-	org	0x0
-	goto	start
+    org 0x0
+    goto start
 
-	org	0x100		    ; Main code starts here at address 0x100
+    org 0x100          ; Main code starts here at address 0x100
 start:
-	movlw 	0x0
-	movwf	TRISB, A	    ; Port C all outputs
-	bra 	test
-loop:
-	movff 	0x06, PORTB
-	incf 	0x06, W, A
-test:
-	movwf	0x06, A	    ; Test for end of loop condition
-	movlw 	0x63
-	cpfsgt 	0x06, A
-	bra 	loop		    ; Not yet finished goto start of loop again
-	goto 	0x0		    ; Re-run program from start
+    clrf LATE, A       ; Clear LATE
+    movlw 0x0
+    movwf TRISE, A     ; Set PORTE as outputs (TRISE = 0)
 
-	end	main
+    ; Toggle motor on and off in a loop
+loop:
+    call delay_1s         ; Wait for some time
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    bsf LATE, 0, A     ; Turn motor on (set RE0 high)
+    call delay_1s         ; Wait for some time
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    call delay_1s
+    bcf LATE, 0, A     ; Turn motor off (clear RE0)
+    goto loop
+
+
+    end main
