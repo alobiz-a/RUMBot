@@ -1,24 +1,58 @@
-	#include <xc.inc>
+#include <xc.inc>
+    
+psect	udata_acs   ; named variables in access ram
+DCounter1:  ds	1
+DCounter2:  ds	1
+DCounter3:  ds	1
+DCounter4:  ds	1   ; used to be DCounter2 EQU 0X0D
+DCounter5:  ds	1
 
-psect	code, abs
-	
-main:
-	org	0x0
-	goto	start
+psect	pwm_delay_code,class=CODE
 
-	org	0x100		    ; Main code starts here at address 0x100
-start:
-	movlw 	0x0
-	movwf	TRISB, A	    ; Port C all outputs
-	bra 	test
-loop:
-	movff 	0x06, PORTB
-	incf 	0x06, W, A
-test:
-	movwf	0x06, A	    ; Test for end of loop condition
-	movlw 	0x63
-	cpfsgt 	0x06, A
-	bra 	loop		    ; Not yet finished goto start of loop again
-	goto 	0x0		    ; Re-run program from start
+setup_PWM:; cofigure pin RC1
+    clrf PORTC      ; clear portc (set pins to a low voltage/0 state)
+    clrf TRISC
 
-	end	main
+PWM_loop:       
+    call DutyCycle                                            
+    call Period	
+    goto PWM_loop
+
+    
+DutyCycle:
+    movlw 0XC5
+    movwf DCounter1
+    movlw 0X15
+    movwf DCounter2
+    bsf	    LATC, 5
+    call DC_loop
+    bcf	    LATC, 5
+    return
+    
+DC_loop:
+    decfsz DCounter1, 1
+    goto DC_loop
+    decfsz DCounter2, 1
+    goto DC_loop
+    return
+    
+Period:
+    movlw 0XC9
+    movwf DCounter3
+    movlw 0X8B
+    movwf DCounter4
+    movlw 0X02
+    movwf DCounter5
+    call P_loop
+    return
+    
+P_loop:
+    decfsz DCounter3, 1
+    goto P_loop
+    decfsz DCounter4, 1
+    goto P_loop
+    decfsz DCounter5, 1
+    goto P_loop
+    nop
+    nop ;*******Deleted to compensate for the extra instruction I have when calling it***
+    return
