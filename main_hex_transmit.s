@@ -1,10 +1,16 @@
 #include <xc.inc>
 
-extrn	UART_Setup, UART_Transmit_Message, UART_Transmit_Hex  ; external subroutines
+extrn	UART_Setup, UART_Transmit_Message, UART_Transmit_Hex, UART_Transmit_Byte  ; external subroutines
+extrn	decimal
+extrn	ANSH, ANSL
+global	LENH,LENL
 	
 psect	udata_acs   ; reserve data space in access ram
 counter:    ds 1    ; reserve one byte for a counter variable
 delay_count:ds 1    ; reserve one byte for counter in the delay routine
+LENH:		ds 1	
+LENL:		ds 1
+
     
 psect	code, abs	
 rst: 	org 0x0
@@ -18,10 +24,24 @@ setup:	bcf	CFGS	; point to Flash program memory
 	
 	; ******* Main programme ****************************************
 start: 	
-	movlw	0x37
-	call UART_Transmit_Hex
+	;movlw	0x37
+	;call UART_Transmit_Hex
+	;movlw	0x0A
+	;call UART_Transmit_Byte
 
-	goto	start		; goto current line in code
+	movlw	0b00000111
+	movwf	LENL
+	movlw	0b00000001
+	movwf	LENH
+	call	decimal
+	call	UART_Transmit_Byte
+	;call	decimal
+	movf	ANSL, 0
+	call	UART_Transmit_Hex
+	movlw	0x0A
+	call UART_Transmit_Byte
+
+	goto	$		; goto current line in code
 
 	; a delay subroutine if you need one, times around loop in delay_count
 delay:	decfsz	delay_count, A	; decrement until zero
