@@ -3,7 +3,7 @@
 extrn	UART_Setup, UART_Transmit_Message, UART_Transmit_Hex, UART_Transmit_Byte  ; external subroutines
 extrn	decimal
 extrn	ANSH, ANSL
-global	LENH,LENL
+global	time_one_H,time_one_L
 	
 psect	udata_acs   ; reserve data space in access ram
 counter:    ds 1    ; reserve one byte for a counter variable
@@ -29,10 +29,6 @@ start:
 	;movlw	0x0A
 	;call UART_Transmit_Byte
 
-	movlw	0b00000111
-	movwf	LENL
-	movlw	0b00000001
-	movwf	LENH
 	call	decimal
 	call	UART_Transmit_Byte
 	;call	decimal

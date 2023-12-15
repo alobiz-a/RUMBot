@@ -2,7 +2,7 @@
 #include <xc.inc>
 
 global  multiply, multiply_24, decimal
-extrn LENH,LENL
+extrn time_one_H,time_one_L
 global ANSH, ANSL
 
 
@@ -90,12 +90,12 @@ multiply_24:		    ; 24 bit by 8 bit multiply routine
 decimal:  
 	; Converts 16 bit Hex number to a number in decimal based on
 	; a configurable conversion factor
-	; Hex input is in LENH:LENL
+	; Hex input is in time_one_H:time_one_L
 	; Number in k can be configured
 	; The output is a 16 bit hex number where its digits is a decimal
 	
-	movff	LENH, ARG1H	; Extract first bit
-	movff	LENL, ARG1L
+	movff	time_one_H, ARG1H	; Extract first bit
+	movff	time_one_L, ARG1L
 	
 	movlw	0x05		; Multiply by our number k
 	movwf	ARG2H
