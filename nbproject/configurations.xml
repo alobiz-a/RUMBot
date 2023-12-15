@@ -16,11 +16,15 @@
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>delays.s</itemPath>
-      <itemPath>test_main.s</itemPath>
       <itemPath>ranger_routines.s</itemPath>
       <itemPath>conversion.s</itemPath>
       <itemPath>dist_on_LCD.s</itemPath>
       <itemPath>LCD_routines.s</itemPath>
+      <itemPath>PWM_routines.s</itemPath>
+      <itemPath>Servo_loops.s</itemPath>
+      <itemPath>UART_routines.s</itemPath>
+      <itemPath>main_w_motor.s</itemPath>
+      <itemPath>DC_motor.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -1158,6 +1162,8 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.ranges" value="0-1ffff"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programmerToGoFilePath"
+                  value="C:/Users/ari_a/OneDrive - Imperial College London/Physics Degree/Y4/RUMBot/debug/default/default_ptg"/>
         <property key="programmerToGoImageName" value="default_ptg"/>
         <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>

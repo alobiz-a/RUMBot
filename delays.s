@@ -1,16 +1,22 @@
 #include <xc.inc>
     
-psect delay_code, class = CODE
- 
-global pulse_delay, ranging_delay, wait_delay
 
+global pulse_delay, ranging_delay, wait_delay, Delay_3s, delay_1s
+
+psect	udata_acs   ; named variables in access ram    
 pd1:	ds 1
 rd1:	ds 1
 rd2:	ds 1
 wd1:	ds 1
 wd2:	ds 1
 wd3:	ds 1
-
+D1:  ds	1
+D2:  ds	1
+D3:  ds	1
+sd1:	ds 1
+sd2:	ds 1
+sd3:	ds 1
+psect delay_code, class = CODE
 ;org 0x00
 pulse_delay: ; Generate 10 us delay.
     movlw   0X22
@@ -53,7 +59,43 @@ wait_delay_loop:
     goto    wait_delay_loop
     nop
     return
-
+    
+Delay_3s:
+    movlw 0X03
+    movwf D1
+    movlw 0X82
+    movwf D2
+    movlw 0XF4
+    movwf D3
+loop3:
+    decfsz D1, 1
+    goto loop3
+    decfsz D2, 1
+    goto loop3
+    decfsz D3, 1
+    goto loop3
+    return
+    
+    
+delay_1s:
+    MOVLW 0XFF
+    MOVWF sd1
+    MOVLW 0X2B
+    MOVWF sd2
+    MOVLW 0X52
+    MOVWF sd3
+LOOP_1s:
+    DECFSZ sd1, 1
+    GOTO LOOP_1s
+    DECFSZ sd2, 1
+    GOTO LOOP_1s
+    DECFSZ sd3, 1
+    GOTO LOOP_1s
+    NOP
+    NOP
+    RETURN
+    
+    
  end
 
 
