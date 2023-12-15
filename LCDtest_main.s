@@ -1,13 +1,15 @@
 ; main file to control the motor, the LCD and the ranger
 #include <xc.inc>
     
-extrn	ranger_main, which_interrupt	; in ranger_routines.s
-extrn	format_for_display  ; in conversion.s
+;SHOULD OUTPUT DIST_L AND DIST_H
 extrn	display_on_LCD	; in dist_on_LCD.s
 extrn	LCD_Setup   ; in LCD_routines.s
+global	dist_H, dist_L
     
     
-psect	udata_acs   ; named variables in access ram
+psect	udata_acs   ; reserve data space in access ram
+dist_H:	    ds 1    ; reserve 1 byte to store the distance measured at each step
+dist_L:	    ds 1    ; store nibble to transmit to display
 ;no variables needed   
 psect	code, abs ; absolute address
 	
@@ -19,15 +21,6 @@ rst:
     goto setup
 
     
-interrupt:
-    org	    0x08
-    btfss   CCP4IF  ;get out of routine if it is an anomalous interrupt  
-    retfie  f;is this necessary?
-    bcf	    CCP4IF  ;clear flag (so that not constantly interrupting
-    goto    which_interrupt ;rising or falling
-
-
-
 setup:
     org	0x100
     	; ******* Programme FLASH read Setup Code ***********************
@@ -38,8 +31,11 @@ setup:
 
 
 main:
-    call    ranger_main
-    call    format_for_display
+    movlw   0x34
+    movwf   dist_H
+    movlw   0x93
+    movwf   dist_L
+    ;call    format_for_display
     call    display_on_LCD
     goto $
 
