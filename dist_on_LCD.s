@@ -1,15 +1,13 @@
 #include <xc.inc>
 
-extrn	LCD_Setup, LCD_Write_Message, LCD_Send_Byte_I, LCD_Send_Byte_D, ClearLCD ; external LCD subroutines - A. CHANGE
-extrn	ranger_main, dist_H, dist_L
-;extrn	variable_code, time_one_H
-global 	main_LCD_loop
+extrn	LCD_Setup, LCD_Write_Message, LCD_Send_Byte_I, LCD_Send_Byte_D, ClearLCD    ; from LCD_routines.s
+extrn	dist_H, dist_L	    ; from conversion.s
+global 	display_on_LCD
     
 psect	udata_acs   ; reserve data space in access ram
 distanceStore:	    ds 1    ; reserve 1 byte to store the distance measured at each step
 LCD_tmp:	    ds 1    ; store nibble to transmit to display
 counter:	    ds 1
-delay_count:	    ds 1 ; reserve 1 byte for delay counter
 ; A. fill later on with counters etc.
     
 psect	udata_bank4 ; reserve data anywhere in RAM (here at 0x400)
@@ -25,23 +23,9 @@ myTable:
 	
 psect	rangerlcd_code,class=CODE
 
-	
-;rst:	; reset vector	
-;	org 0x0
-; 	goto	setup
-;
-;
-;	; ******* Programme FLASH read Setup Code ***********************
-;setup:	org	0x100
-;	bcf	CFGS	; point to Flash program memory  
-;	bsf	EEPGD 	; access Flash program memory
-;	call	LCD_Setup	; setup LCD
-;	goto	main_LCD_loop
-;	
-
-	; ******* Main programme ****************************************
-main_LCD_loop:
-
+; ******* Main programme ****************************************
+display_on_LCD:
+;***********WRITE "RANGE(MM)" LINE 1**************
 LCD_line1:
 	movlw   0X80		; Address of first line
 	call    LCD_Send_Byte_I 
@@ -49,6 +33,7 @@ LCD_line1:
 	movlw   0x0
 	call    LCD_Send_Byte_D
 	call    LCD_load_line1
+;***********WRITE DISTANCE VALUE TO LINE 2**********
 LCD_line2:
 	movlw   0xC0	; Write to second line
 	call    LCD_Send_Byte_I	; move the cursor to the second line
@@ -60,7 +45,7 @@ LCD_line2:
 	movf	dist_L,0    ; TEST!!!
 	call	LCD_load_line2
 	return
-	
+;***************LOADING ONTO THE SCREEN*************	
 ;******************Write "Range (mm):" to line 1********************************
 LCD_load_line1:
 	lfsr	0, myArray	; Load FSR0 with address in RAM	
@@ -103,14 +88,6 @@ LCD_Hex_Nib:			; writes low nibble as hex character
 	return		
 
 	
-
-
-    
-;************ a delay subroutine if you need one, times around loop in delay_count***********
-delay:	decfsz	delay_count, A	; decrement until zero
-	bra	delay
-	return
-
 	
 
 
