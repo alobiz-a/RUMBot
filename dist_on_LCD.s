@@ -1,7 +1,7 @@
 #include <xc.inc>
 
 extrn	LCD_Setup, LCD_Write_Message, LCD_Send_Byte_I, LCD_Send_Byte_D, ClearLCD ; external LCD subroutines - A. CHANGE
-extrn	ranger_main, time_one_H, time_one_L, time_two_H, time_two_L
+extrn	ranger_main, dist_H, dist_L
 ;extrn	variable_code, time_one_H
 global 	main_LCD_loop
     
@@ -55,8 +55,9 @@ LCD_line2:
 
 	movlw   0x0			; The value in the working reg is set to 0 - A. NOW 5 - WHAT DOES THIS DO??
 	call    LCD_Send_Byte_D	; Display this on the second line (a blank space)
-	call	ranger_main ;CHANGE W RANGER ROUTINE
-	movf	time_one_H,0 ;CHANGE WITH VALUE OBTAINED FROM MEASUREMENT!!!
+	movf	dist_H,0 ; TEST!!!
+	call	LCD_load_line2
+	movf	dist_L,0    ; TEST!!!
 	call	LCD_load_line2
 	return
 	

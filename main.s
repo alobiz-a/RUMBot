@@ -2,14 +2,12 @@
 #include <xc.inc>
     
 extrn	main_LCD_loop, LCD_Setup
-;extrn	PWM_90R, PWM_45R, PWM_0, PWM_45L, PWM_90L
-;extrn	Delay_3s
-;extrn	UART_Setup, UART_Transmit_Message  ; external uart subroutines
+extrn	time_H, time_L, dist_H, dist_L
     
 psect	udata_acs   ; named variables in access ram
-MD1:  ds	1   ; the motor delay counters
-MD2:  ds	1
-MD3:  ds	1
+;MD1:  ds	1   ; the motor delay counters
+;MD2:  ds	1
+;MD3:  ds	1
     
 psect	code, abs ; absolute address
 	
@@ -25,13 +23,13 @@ setup:
     
     bcf	CFGS	; point to Flash program memory  
     bsf	EEPGD 	; access Flash program memory
-;    clrf	PORTC      ; clear portc (set pins to a low voltage/0 state) to configure motor
-;    clrf	TRISC
     call	LCD_Setup	; setup LCD
     ;call	UART_Setup
     goto	start
 
 
 start:
-    call main_LCD_loop
-    goto start
+    call    range_main
+    call    format_for_display; converts the high and low time bytes into distances to display
+    call    main_LCD_loop
+    goto $

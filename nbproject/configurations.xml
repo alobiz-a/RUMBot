@@ -16,7 +16,10 @@
       <itemPath>.gitignore</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>delays.s</itemPath>
-      <itemPath>ranger_routine.s</itemPath>
+      <itemPath>LCD_routines.s</itemPath>
+      <itemPath>test_main.s</itemPath>
+      <itemPath>conversion.s</itemPath>
+      <itemPath>ranger_routines.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
