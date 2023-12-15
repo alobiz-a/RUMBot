@@ -21,6 +21,7 @@
       <itemPath>conversion.s</itemPath>
       <itemPath>ranger_routines.s</itemPath>
       <itemPath>dist_on_LCD.s</itemPath>
+      <itemPath>UART_routines.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

@@ -28,6 +28,7 @@ ranger_main:
     call    wait_delay
     call    wait_delay
     call    wait_delay
+    call    interrupt_clear ;addition 04:12
     ;goto    ranger_main	;stay here until an interrupt causes us to jump out
     return  ;so that we can make it external
 

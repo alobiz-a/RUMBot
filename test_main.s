@@ -5,6 +5,8 @@ extrn	ranger_main, which_interrupt	; in ranger_routines.s
 extrn	format_for_display  ; in conversion.s
 extrn	display_on_LCD	; in dist_on_LCD.s
 extrn	LCD_Setup   ; in LCD_routines.s
+extrn	UART_Setup, send_dists_UART  ; in UART_routines.s
+;ADD DELAYS!!!
     
     
 psect	udata_acs   ; named variables in access ram
@@ -30,10 +32,11 @@ interrupt:
 
 setup:
     org	0x100
-    	; ******* Programme FLASH read Setup Code ***********************
-    bcf	CFGS	; point to Flash program memory  
-    bsf	EEPGD 	; access Flash program memory
-    call    LCD_Setup
+    ;******* Program FLASH read Setup Code ***********************
+    bcf		CFGS	; point to Flash program memory  
+    bsf		EEPGD 	; access Flash program memory
+    call	LCD_Setup
+    call	UART_Setup
     goto	main
 
 
@@ -41,6 +44,7 @@ main:
     call    ranger_main
     call    format_for_display
     call    display_on_LCD
+    call    send_dists_UART
     goto $
 
 
