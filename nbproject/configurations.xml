@@ -19,6 +19,7 @@
       <itemPath>LCD_routines.s</itemPath>
       <itemPath>dist_on_LCD.s</itemPath>
       <itemPath>LCDtest_main.s</itemPath>
+      <itemPath>conversion.s</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
