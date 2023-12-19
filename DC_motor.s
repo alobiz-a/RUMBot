@@ -12,17 +12,12 @@ setup_DCmotor:
 
     ; Toggle motor on and off in a loop
 vertical_motion:
-    call delay_1s         ; Wait for some time
-    call delay_1s
-    call delay_1s
-    call delay_1s
-    call delay_1s
-    call delay_1s
+    ;call delay_1s         ; Wait for some time
+    ;call delay_1s
     call delay_1s
     call delay_1s
     bsf LATE, 0, A     ; Turn motor on (set RE0 high)
     call wait_delay      ; Wait for some time
-    call wait_delay
     call wait_delay
     call wait_delay
     call wait_delay

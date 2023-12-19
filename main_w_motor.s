@@ -51,6 +51,7 @@ setup:
 
 
 main:
+    call    vertical_motion
     ;*********90L**********
     call    Set_Mdelay_counter
     call    M_loop_90L1
